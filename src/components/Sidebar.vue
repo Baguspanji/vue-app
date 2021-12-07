@@ -35,9 +35,9 @@
     <!-- Nav Item - Pages Collapse Menu -->
 
     <li class="nav-item active">
-      <router-link class="nav-link" :to="{ name: 'book.index' }">
-        <i class="fas fa-fw fa-book"></i>
-        <span>Books</span></router-link
+      <router-link class="nav-link" :to="{ name: 'sampah.index' }">
+        <i class="fas fa-fw fa-database"></i>
+        <span>Sampah</span></router-link
       >
     </li>
 

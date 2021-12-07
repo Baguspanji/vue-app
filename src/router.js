@@ -15,14 +15,14 @@ const routes = [
         component: () => import('./views/home/Index.vue')
     },
     {
-        path: '/book',
-        name: 'book.index',
-        component: () => import('./views/book/Index.vue')
+        path: '/sampah',
+        name: 'sampah.index',
+        component: () => import('./views/sampah/Index.vue')
     },
     {
-        path: '/book/add',
-        name: 'book.add',
-        component: () => import('./views/book/Add.vue')
+        path: '/sampah/add',
+        name: 'sampah.add',
+        component: () => import('./views/sampah/Add.vue')
     },
 ];
 

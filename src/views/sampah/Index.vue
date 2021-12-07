@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">List Book</h1>
+      <h1 class="h3 mb-0 text-gray-800">List Sampah</h1>
     </div>
 
     <div class="row">
@@ -11,12 +11,12 @@
         <div class="card border-0 shadow rounded-3">
           <div class="card-body">
             <h4>
-              List Book
+              List Sampah
 
               <router-link
-                :to="{ name: 'book.add' }"
+                :to="{ name: 'sampah.add' }"
                 class="btn btn-primary float-right"
-                ><i class="fas fa-plus-circle"></i> Add Book</router-link
+                ><i class="fas fa-plus-circle"></i> Add Sampah</router-link
               >
             </h4>
             <hr />
@@ -32,13 +32,13 @@
                 </tr>
               </thead>
               <tbody class="text-center">
-                <tr v-for="(book, index) in books" :key="index">
+                <tr v-for="(sampahsData, index) in sampahs" :key="index">
                   <th>
                     {{ index + 1 + (nowPage > 1 ? (nowPage - 1) * 10 : 0) }}
                   </th>
-                  <td>{{ book.title }}</td>
-                  <td>{{ book.page }}</td>
-                  <td>{{ book.user.name }}</td>
+                  <td>{{ sampahsData.Kode }}</td>
+                  <td>{{ sampahsData.Nama }}</td>
+                  <td>{{ sampahsData.Jenis.Kode }}</td>
                   <td>
                     <a
                       href="javascript:void(0)"
@@ -119,40 +119,40 @@ export default {
   name: "Sampah",
   data() {
     return {
-      books: [],
-      booksData: [],
+      sampahs: [],
+      sampahsData: [],
       pages: 1,
       nowPage: 1,
     };
   },
   methods: {
     async getData() {
-      const res = await axios.get("book");
+      const res = await axios.get('sampah/listsampah');
 
-      var page = res.data.data.length;
+      var page = res.data.result.length;
       page = String(page / 10);
       const arrNo = page.split(".");
 
       this.pages = parseInt(arrNo[0]) < 18 ? parseInt(arrNo[0]) + 1 : 0;
       this.nowPage = 1;
 
-      this.booksData = res.data.data;
-      this.books = [];
+      this.sampahsData = res.data.result;
+      this.sampahs = [];
       for (let i = 0; i < 10; i++) {
-        if (res.data.data[i]) {
-          this.books.push(res.data.data[i]);
+        if (res.data.result[i]) {
+          this.sampahs.push(res.data.result[i]);
         }
       }
     },
     handlePage(index) {
       var last = index * 10 - 10;
 
-      this.books = [];
-      const data = this.booksData;
+      this.sampahs = [];
+      const data = this.sampahsData;
 
       for (let i = 0; i < 10; i++) {
         if (data[last]) {
-          this.books.push(data[last]);
+          this.sampahs.push(data[last]);
           last++;
         }
       }
