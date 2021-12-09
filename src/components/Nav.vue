@@ -10,6 +10,7 @@
         static-top
         shadow
       "
+      v-if="user != null"
     >
       <!-- Sidebar Toggle (Topbar) -->
       <button
@@ -273,7 +274,13 @@
             >
               Cancel
             </button>
-            <a class="btn btn-primary" href="javascript:void(0)" @click="onLogout">Logout</a>
+            <a
+              class="btn btn-primary"
+              href="javascript:void(0)"
+              data-dismiss="modal"
+              @click="onLogout"
+              >Logout</a
+            >
           </div>
         </div>
       </div>
@@ -291,7 +298,8 @@ export default {
     onLogout() {
       localStorage.removeItem("token");
       this.$store.dispatch("user", null);
-      this.$router.push("/");
+      this.$store.dispatch("level", null);
+      this.$router.push("/login");
     },
   },
   computed: {
