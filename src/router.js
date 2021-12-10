@@ -33,6 +33,22 @@ const routes = [
             requiresAuth: true,
         }
     },
+    {
+        path: '/admin',
+        name: 'admin.index',
+        component: () => import('./views/admin/Index.vue'),
+        meta: {
+            requiresAuth: true,
+        }
+    },
+    {
+        path: '/admin/add',
+        name: 'admin.add',
+        component: () => import('./views/admin/Add.vue'),
+        meta: {
+            requiresAuth: true,
+        }
+    },
 ];
 
 const router = new VueRouter({
