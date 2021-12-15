@@ -49,6 +49,14 @@ const routes = [
             requiresAuth: true,
         }
     },
+    {
+        path: '/data',
+        name: 'data.index',
+        component: () => import('./views/table/Index.vue'),
+        meta: {
+            requiresAuth: true,
+        }
+    },
 ];
 
 const router = new VueRouter({

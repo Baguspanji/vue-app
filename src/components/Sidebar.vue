@@ -50,6 +50,13 @@
           <span>Admin</span></router-link
         >
       </li>
+      
+      <li class="nav-item active">
+        <router-link class="nav-link" :to="{ name: 'data.index' }">
+          <i class="fas fa-fw fa-database"></i>
+          <span>Data</span></router-link
+        >
+      </li>
 
       <li class="nav-item">
         <a
