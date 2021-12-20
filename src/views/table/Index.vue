@@ -1,91 +1,101 @@
 <template>
-    <div>
+  <div class="container page">
+    <div class="card shadow border-1">
+      <div class="card-body">
+        <h1 class="title">
+          Selamat Datang
+          <router-link
+            :to="{ name: 'sampah.add' }"
+            class="btn btn-primary btn-sm float-right"
+            ><i class="bi bi-plus-lg"></i> Tambah Data</router-link
+          >
+        </h1>
+        <hr />
+
         <vue-bootstrap4-table :rows="rows" :columns="columns" :config="config">
         </vue-bootstrap4-table>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    import VueBootstrap4Table from 'vue-bootstrap4-table'
+import axios from "axios";
+import VueBootstrap4Table from "vue-bootstrap4-table";
 
-    export default {
-        name: 'dataTable',
-        data: function() {
-            return {
-                rows: [{
-                        "id": 1,
-                        "name": {
-                            "first_name": "Vladimir",
-                            "last_name": "Nitzsche"
-                        },
-                        "address": {
-                            "country": "Mayotte"
-                        },
-                        "email": "franecki.anastasia@gmail.com",
-                    },
-                    {
-                        "id": 2,
-                        "name": {
-                            "first_name": "Irwin",
-                            "last_name": "Bayer"
-                        },
-                        "age": 23,
-                        "address": {
-                            "country": "Guernsey"
-                        },
-                        "email": "rlittle@macejkovic.biz",
-                    },
-                    {
-                        "id": 3,
-                        "name": {
-                            "first_name": "Don",
-                            "last_name": "Herman"
-                        },
-                        "address": {
-                            "country": "Papua New Guinea"
-                        },
-                        "email": "delia.becker@cormier.com",
-                    }],
-                columns: [{
-                        label: "id",
-                        name: "id",
-                        filter: {
-                            type: "simple",
-                            placeholder: "id"
-                        },
-                        sort: true,
-                    },
-                    {
-                        label: "First Name",
-                        name: "name.first_name",
-                        filter: {
-                            type: "simple",
-                            placeholder: "Enter first name"
-                        },
-                        sort: true,
-                    },
-                    {
-                        label: "Email",
-                        name: "email",
-                        sort: true,
-                    },
-                    {
-                        label: "Country",
-                        name: "address.country",
-                        filter: {
-                            type: "simple",
-                            placeholder: "Enter country"
-                        },
-                    }],
-                config: {
-                    checkbox_rows: true,
-                    rows_selectable: true,
-                    card_title: "Vue Bootsrap 4 advanced table"
-                }
-            }
+export default {
+  name: "Sampah",
+  components: {
+    VueBootstrap4Table,
+  },
+  data() {
+    return {
+      rows: [
+        {
+          no: 1,
+          kode: "SMP001",
+          nama_sampah: "Kardus",
+          jenis: "Plastik",
         },
-        components: {
-            VueBootstrap4Table
-        }
-    }
+      ],
+      columns: [
+        {
+          label: "#",
+          name: "no",
+        },
+        {
+          label: "Kode",
+          name: "kode",
+        },
+        {
+          label: "Nama Sampah",
+          name: "nama_sampah",
+        },
+        {
+          label: "Jenis",
+          name: "jenis",
+        },
+      ],
+      config: {
+        card_title: "Daftar Sampah",
+        card_mode: false,
+        selected_rows_info: false,
+        pagination: true,
+        pagination_info: true,
+        num_of_visibile_pagination_buttons: 7,
+        global_search: {
+          placeholder: "Cari Sampah",
+          visibility: true,
+          case_sensitive: false,
+        },
+        per_page_options: [10, 20, 30],
+        show_refresh_button: false,
+        show_reset_button: false,
+      },
+    };
+  },
+  methods: {
+    async getData() {
+      var res = await axios.get(
+        "http://147.139.193.105/resik/v1/sampah/listsampah"
+      );
+
+      var sampahs = [];
+      var no = 1;
+      res.data.result.forEach((sampah) => {
+        sampahs.push({
+          no: no++,
+          kode: sampah.Kode,
+          nama_sampah: sampah.Nama,
+          jenis: sampah.Jenis.Nama,
+        });
+      });
+
+      this.rows = sampahs;
+    },
+  },
+  mounted() {
+    this.getData();
+  },
+};
 </script>
