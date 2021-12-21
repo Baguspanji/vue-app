@@ -23,6 +23,7 @@ const routes = [
         component: () => import('./views/sampah/Index.vue'),
         meta: {
             requiresAuth: true,
+            isAdmin: true
         }
     },
     {
@@ -31,6 +32,7 @@ const routes = [
         component: () => import('./views/sampah/Add.vue'),
         meta: {
             requiresAuth: true,
+            isAdmin: true
         }
     },
     {
@@ -39,6 +41,7 @@ const routes = [
         component: () => import('./views/admin/Index.vue'),
         meta: {
             requiresAuth: true,
+            isSuperAdmin: true
         }
     },
     {
@@ -47,6 +50,7 @@ const routes = [
         component: () => import('./views/admin/Add.vue'),
         meta: {
             requiresAuth: true,
+            isSuperAdmin: true
         }
     },
     {
@@ -68,12 +72,26 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (localStorage.getItem("token") != null) {
+    const auth = JSON.parse(window.localStorage.getItem("lbUser"))
+
+    if (to.meta.requiresAuth) {
+        if (!auth || !auth.token) {
+            next('/login')
+        } else if (to.meta.isAdmin) {
+            if (auth.role === 'admin') {
+                next()
+            } else {
+                alert("anda harus login admin");
+            }
+        } else if (to.meta.isSuperAdmin) {
+            if (auth.role === 'super_admin') {
+                next()
+            } else {
+                alert("anda harus login super admin");
+            }
+        } else {
             next()
-            return
         }
-        next('/login')
     } else {
         next()
     }

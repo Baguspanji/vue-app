@@ -55,14 +55,25 @@ export default {
         });
 
         if (res.data.hasil) {
-          localStorage.setItem("token", res.data.token);
-          this.$store.dispatch("user", res.data);
-
           const response = await axios.get("admin/get", {
             headers: { Authorization: res.data.token },
           });
 
+          this.$store.dispatch("user", res.data);
           this.$store.dispatch("level", response.data.result.Level);
+
+          var store = {
+            token: res.data.token,
+            role: "",
+          };
+
+          if (response.data.result.Level == 1) {
+            store.role = "super_admin";
+          } else if (response.data.result.Level == 2) {
+            store.role = "admin";
+          }
+
+          window.localStorage.setItem("lbUser", JSON.stringify(store));
 
           this.$router.push("/");
         } else {

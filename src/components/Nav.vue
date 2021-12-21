@@ -296,7 +296,7 @@ export default {
   name: "Navbar",
   methods: {
     onLogout() {
-      localStorage.removeItem("token");
+      localStorage.removeItem("lbUser");
       this.$store.dispatch("user", null);
       this.$store.dispatch("level", null);
       this.$router.push("/login");

@@ -51,17 +51,23 @@ export default {
     Sidebar,
   },
   async created() {
-    var token = localStorage.getItem("token");
+    var auth = JSON.parse(window.localStorage.getItem("lbUser"));
 
-    if (token != null) {
+    if (auth) {
       try {
         const res = await axios.get("admin/get");
 
-        this.$store.dispatch("user", res.data.result);
-        this.$store.dispatch("level", res.data.result.Level);
+        if (res.data.hasil) {
+          this.$store.dispatch("user", res.data.result);
+          this.$store.dispatch("level", res.data.result.Level);
+        }
       } catch (err) {
         console.log(err);
       }
+    } else {
+      localStorage.removeItem("lbUser");
+      this.$store.dispatch("user", null);
+      this.$store.dispatch("level", null);
     }
   },
 };
