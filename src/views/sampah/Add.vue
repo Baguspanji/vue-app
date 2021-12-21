@@ -1,49 +1,39 @@
 <template>
-  <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Add Book</h1>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card border-0 shadow rounded-3">
-          <div class="card-body">
-            <h4>Add Sampah</h4>
-            <hr />
-
-            <form @submit.prevent="onSave">
-              <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="title"
-                  placeholder="Book Title"
-                  v-model="title"
-                />
-                <p class="text-danger mt-2" v-if="error_message.title">
-                  {{ error_message.title[0] }}
-                </p>
-              </div>
-              <div class="mb-3">
-                <label for="page" class="form-label">Page</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="page"
-                  placeholder="Nama Sampah"
-                  v-model="page"
-                />
-                <p class="text-danger mt-2" v-if="error_message.page">
-                  {{ error_message.page[0] }}
-                </p>
-              </div>
-              <button type="submit" class="btn btn-primary float-end">
-                Simpan
-              </button>
-            </form>
+  <div class="container-fluid page">
+    <div class="card shadow border-1">
+      <div class="card-body">
+        <h1 class="title">Selamat Datang</h1>
+        <hr />
+        <form @submit.prevent="postData()">
+          <div class="form-group">
+            <label for="nama_sampah">Nama Sampah</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nama_sampah"
+              placeholder="Masukkan Nama Sampah"
+              v-model="namaSampah"
+            />
           </div>
-        </div>
+          <div class="form-group">
+            <label for="jenis_sampah">Jenis Sampah</label>
+            <select
+              class="form-control"
+              id="jenis_sampah"
+              v-model="jenisSampah"
+            >
+              <option value="">Pilih Jenis Sampah</option>
+              <option
+                v-for="jenis in jenisSampahs"
+                v-bind:key="jenis._id"
+                v-bind:value="jenis.Kode"
+              >
+                {{ jenis.Nama }}
+              </option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
       </div>
     </div>
   </div>
@@ -53,33 +43,43 @@
 import axios from "axios";
 
 export default {
-  name: "AddBook",
+  name: "Home",
   data() {
     return {
-      title: "",
-      page: "",
-      error_message: {
-        title: null,
-        page: null,
-      },
+      jenisSampahs: null,
+      jenisSampah: "",
+      namaSampah: "",
     };
   },
   methods: {
-    async onSave() {
-      try {
-        await axios.post("book", {
-          title: this.title,
-          page: this.page,
-        });
+    async getData() {
+      var res = await axios.post(
+        "http://147.139.193.105/resik/v1/jenissampah/list"
+      );
 
-        this.$router.push("/book");
-      } catch (error) {
-        this.error_message = error.response.data;
+      this.jenisSampahs = res.data.result;
+    },
+    async postData() {
+      var res = await axios.post(
+        "http://147.139.193.105/resik/v1/sampah/add",
+        {
+          nama: this.namaSampah,
+          jenis: this.jenisSampah,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        }
+      );
+
+      if (res.data.hasil) {
+        this.$router.push('/sampah')
       }
     },
   },
+  mounted() {
+    this.getData();
+  },
 };
 </script>
-
-<style>
-</style>
