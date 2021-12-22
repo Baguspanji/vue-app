@@ -60,14 +60,14 @@ export default {
         if (res.data.hasil) {
           this.$store.dispatch("user", res.data.result);
           this.$store.dispatch("level", res.data.result.Level);
+        } else {
+          localStorage.removeItem("lbUser");
+          this.$store.dispatch("user", null);
+          this.$store.dispatch("level", null);
         }
       } catch (err) {
         console.log(err);
       }
-    } else {
-      localStorage.removeItem("lbUser");
-      this.$store.dispatch("user", null);
-      this.$store.dispatch("level", null);
     }
   },
 };
