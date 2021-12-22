@@ -1,112 +1,33 @@
 <template>
-  <!-- Begin Page Content -->
-  <div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">List Sampah</h1>
-    </div>
+  <div class="container page">
+    <div class="card shadow border-1">
+      <div class="card-body">
+        <h1 class="title">
+          Selamat Datang
+          <router-link
+            :to="{ name: 'sampah.add' }"
+            class="btn btn-primary btn-sm float-right"
+            ><i class="bi bi-plus-lg"></i> Tambah Data</router-link
+          >
+        </h1>
+        <hr />
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card border-0 shadow rounded-3">
-          <div class="card-body">
-            <h4>
-              List Sampah
-
-              <router-link
-                :to="{ name: 'sampah.add' }"
-                class="btn btn-primary float-right"
-                ><i class="fas fa-plus-circle"></i> Add Sampah</router-link
-              >
-            </h4>
-            <hr />
-
-            <table class="table table-bordered">
-              <thead class="text-center">
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Page</th>
-                  <th scope="col">Author</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody class="text-center">
-                <tr v-for="(sampahsData, index) in sampahs" :key="index">
-                  <th>
-                    {{ index + 1 + (nowPage > 1 ? (nowPage - 1) * 10 : 0) }}
-                  </th>
-                  <td>{{ sampahsData.Kode }}</td>
-                  <td>{{ sampahsData.Nama }}</td>
-                  <td>{{ sampahsData.Jenis.Kode }}</td>
-                  <td>
-                    <a
-                      href="javascript:void(0)"
-                      class="btn btn-sm btn-warning mr-2"
-                      ><i class="fas fa-pen"></i
-                    ></a>
-                    <a
-                      href="javascript:void(0)"
-                      class="btn btn-sm btn-danger"
-                      @click="onDelete(book._id)"
-                      ><i class="fas fa-trash"></i
-                    ></a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-end">
-                <li class="page-item disabled" v-if="nowPage == 1">
-                  <a
-                    class="page-link"
-                    @click="handlePage(nowPage - 1)"
-                    href="javascript:void(0)"
-                    >Previous</a
-                  >
-                </li>
-                <li class="page-item" v-if="nowPage > 1">
-                  <a
-                    class="page-link"
-                    @click="handlePage(nowPage - 1)"
-                    href="javascript:void(0)"
-                    >Previous</a
-                  >
-                </li>
-                <div v-for="index in pages" :key="index">
-                  <li class="page-item active" v-if="nowPage == index">
-                    <a class="page-link" href="#">{{ index }}</a>
-                  </li>
-                  <li class="page-item" v-if="nowPage != index">
-                    <a
-                      class="page-link"
-                      @click="handlePage(index)"
-                      href="javascript:void(0)"
-                      >{{ index }}</a
-                    >
-                  </li>
-                </div>
-                <li class="page-item disabled" v-if="nowPage == pages">
-                  <a
-                    class="page-link"
-                    @click="handlePage(nowPage + 1)"
-                    href="javascript:void(0)"
-                    >Next</a
-                  >
-                </li>
-                <li class="page-item" v-if="nowPage < pages">
-                  <a
-                    class="page-link"
-                    @click="handlePage(nowPage + 1)"
-                    href="javascript:void(0)"
-                    >Next</a
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+        <vue-bootstrap4-table :rows="rows" :columns="columns" :config="config">
+          <template slot="aksi" slot-scope="rows">
+            <button
+              class="btn btn-warning mr-2"
+              @click="onEdit(rows)"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-info"
+              @click="onDetail(rows)"
+            >
+              Detail
+            </button>
+          </template>
+        </vue-bootstrap4-table>
       </div>
     </div>
   </div>
@@ -114,55 +35,91 @@
 
 <script>
 import axios from "axios";
+import VueBootstrap4Table from "vue-bootstrap4-table";
 
 export default {
   name: "Sampah",
+  components: {
+    VueBootstrap4Table,
+  },
   data() {
     return {
-      sampahs: [],
-      sampahsData: [],
-      pages: 1,
-      nowPage: 1,
+      rows: [
+        {
+          no: 1,
+          kode: "SMP001",
+          nama_sampah: "Kardus",
+          jenis: "Plastik",
+        },
+      ],
+      columns: [
+        {
+          label: "#",
+          name: "no",
+        },
+        {
+          label: "Kode",
+          name: "kode",
+        },
+        {
+          label: "Nama Sampah",
+          name: "nama_sampah",
+        },
+        {
+          label: "Jenis",
+          name: "jenis",
+        },
+        {
+          label: "Aksi",
+          name: "aksi",
+        },
+      ],
+      config: {
+        card_title: "Daftar Sampah",
+        card_mode: false,
+        selected_rows_info: false,
+        pagination: true,
+        pagination_info: true,
+        num_of_visibile_pagination_buttons: 7,
+        global_search: {
+          placeholder: "Cari Sampah",
+          visibility: true,
+          case_sensitive: false,
+        },
+        per_page_options: [10, 20, 30],
+        show_refresh_button: false,
+        show_reset_button: false,
+      },
     };
   },
   methods: {
     async getData() {
-      const res = await axios.get('sampah/listsampah');
+      var res = await axios.get(
+        "http://147.139.193.105/resik/v1/sampah/listsampah"
+      );
 
-      var page = res.data.result.length;
-      page = String(page / 10);
-      const arrNo = page.split(".");
+      var sampahs = [];
+      var no = 1;
+      res.data.result.forEach((sampah) => {
+        sampahs.push({
+          no: no++,
+          id: sampah._id,
+          kode: sampah.Kode,
+          nama_sampah: sampah.Nama,
+          jenis: sampah.Jenis.Nama,
+          aksi: "",
+        });
+      });
 
-      this.pages = parseInt(arrNo[0]) < 18 ? parseInt(arrNo[0]) + 1 : 0;
-      this.nowPage = 1;
-
-      this.sampahsData = res.data.result;
-      this.sampahs = [];
-      for (let i = 0; i < 10; i++) {
-        if (res.data.result[i]) {
-          this.sampahs.push(res.data.result[i]);
-        }
-      }
+      this.rows = sampahs;
     },
-    handlePage(index) {
-      var last = index * 10 - 10;
-
-      this.sampahs = [];
-      const data = this.sampahsData;
-
-      for (let i = 0; i < 10; i++) {
-        if (data[last]) {
-          this.sampahs.push(data[last]);
-          last++;
-        }
-      }
-
-      this.nowPage = index;
+    onEdit(id) {
+      var data = this.output = id;
+      console.log(data.row.id)
     },
-    onDelete(id) {
-      axios.delete(`book/${id}`);
-
-      this.getData();
+    onDetail(id) {
+      var data = this.output = id;
+      console.log(data.row.id)
     },
   },
   mounted() {

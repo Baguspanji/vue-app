@@ -53,28 +53,26 @@ export default {
   },
   methods: {
     async getData() {
-      var res = await axios.post(
-        "http://147.139.193.105/resik/v1/jenissampah/list"
-      );
+      var res = await axios.post('jenissampah/list');
 
       this.jenisSampahs = res.data.result;
     },
     async postData() {
       var res = await axios.post(
-        "http://147.139.193.105/resik/v1/sampah/add",
+        'sampah/add',
         {
           nama: this.namaSampah,
           jenis: this.jenisSampah,
         },
         {
           headers: {
-            Authorization: localStorage.getItem('token'),
+            Authorization: localStorage.getItem("token"),
           },
         }
       );
 
       if (res.data.hasil) {
-        this.$router.push('/sampah')
+        this.$router.push("/sampah");
       }
     },
   },
