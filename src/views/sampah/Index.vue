@@ -14,18 +14,19 @@
 
         <vue-bootstrap4-table :rows="rows" :columns="columns" :config="config">
           <template slot="aksi" slot-scope="rows">
-            <button
-              class="btn btn-warning mr-2"
-              @click="onEdit(rows)"
-            >
+            <button class="btn btn-warning mr-2" @click="onEdit(rows)">
               Edit
             </button>
-            <button
-              class="btn btn-info"
-              @click="onDetail(rows)"
-            >
+            <button class="btn btn-info mr-2" @click="onDetail(rows)">
               Detail
             </button>
+            <button class="btn btn-success" @click="onFoto(rows)">
+              Upload Foto
+            </button>
+          </template>
+          <template slot="image" slot-scope="rows">
+            <img :src="rows.row.foto" alt="..." v-if="rows.row.foto" />
+            <p v-if="!rows.row.foto">No Image</p>
           </template>
         </vue-bootstrap4-table>
       </div>
@@ -56,6 +57,10 @@ export default {
         {
           label: "#",
           name: "no",
+        },
+        {
+          label: "Gambar",
+          name: "image",
         },
         {
           label: "Kode",
@@ -94,9 +99,7 @@ export default {
   },
   methods: {
     async getData() {
-      var res = await axios.get(
-        "http://147.139.193.105/resik/v1/sampah/listsampah"
-      );
+      var res = await axios.get("sampah/listsampah");
 
       var sampahs = [];
       var no = 1;
@@ -108,18 +111,27 @@ export default {
           nama_sampah: sampah.Nama,
           jenis: sampah.Jenis.Nama,
           aksi: "",
+          image: "",
+          foto:
+            sampah.Foto != ""
+              ? "http://147.139.193.105/resik" + sampah.Foto
+              : "",
         });
       });
 
       this.rows = sampahs;
     },
     onEdit(id) {
-      var data = this.output = id;
-      console.log(data.row.id)
+      var data = (this.output = id);
+      this.$router.push({ name: "sampah.edit", params: { id: data.row.id } });
     },
     onDetail(id) {
-      var data = this.output = id;
-      console.log(data.row.id)
+      var data = (this.output = id);
+      console.log(data.row.id);
+    },
+    onFoto(id) {
+      var data = (this.output = id);
+      this.$router.push({ name: "sampah.foto", params: { id: data.row.kode } });
     },
   },
   mounted() {
@@ -127,3 +139,9 @@ export default {
   },
 };
 </script>
+
+<style>
+img {
+  width: 100px;
+}
+</style>

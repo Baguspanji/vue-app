@@ -15,7 +15,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <!-- <i class="fas fa-laugh-wink"></i> -->
         </div>
-        <div class="sidebar-brand-text mx-3">Bank Sampah</div>
+        <div class="sidebar-brand-text mx-3">Super Admin</div>
       </a>
 
       <!-- Divider -->
@@ -48,13 +48,6 @@
         <router-link class="nav-link" :to="{ name: 'admin.index' }">
           <i class="fas fa-fw fa-database"></i>
           <span>Admin</span></router-link
-        >
-      </li>
-
-      <li class="nav-item active">
-        <router-link class="nav-link" :to="{ name: 'data.index' }">
-          <i class="fas fa-fw fa-database"></i>
-          <span>Data</span></router-link
         >
       </li>
 
@@ -107,7 +100,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <!-- <i class="fas fa-laugh-wink"></i> -->
         </div>
-        <div class="sidebar-brand-text mx-3">Bank Sampah</div>
+        <div class="sidebar-brand-text mx-3">Admin</div>
       </a>
 
       <!-- Divider -->
@@ -140,13 +133,6 @@
         <router-link class="nav-link" :to="{ name: 'admin.index' }">
           <i class="fas fa-fw fa-database"></i>
           <span>Admin</span></router-link
-        >
-      </li>
-
-      <li class="nav-item active">
-        <router-link class="nav-link" :to="{ name: 'data.index' }">
-          <i class="fas fa-fw fa-database"></i>
-          <span>Data</span></router-link
         >
       </li>
 

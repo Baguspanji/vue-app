@@ -32,7 +32,7 @@
               </option>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </div>
     </div>
@@ -43,7 +43,7 @@
 import axios from "axios";
 
 export default {
-  name: "Home",
+  name: "EditSampah",
   data() {
     return {
       jenisSampahs: null,
@@ -53,13 +53,13 @@ export default {
   },
   methods: {
     async getData() {
-      var res = await axios.post('jenissampah/list');
+      var res = await axios.post("jenissampah/list");
 
       this.jenisSampahs = res.data.result;
     },
     async postData() {
       var res = await axios.post(
-        'sampah/add',
+        "sampah/add",
         {
           nama: this.namaSampah,
           jenis: this.jenisSampah,
@@ -73,6 +73,7 @@ export default {
   },
   mounted() {
     this.getData();
+    console.log(this.$route.params);
   },
 };
 </script>

@@ -23,7 +23,7 @@ const routes = [
         component: () => import('./views/sampah/Index.vue'),
         meta: {
             requiresAuth: true,
-            isAdmin: true
+            isSuperAdmin: true
         }
     },
     {
@@ -32,7 +32,25 @@ const routes = [
         component: () => import('./views/sampah/Add.vue'),
         meta: {
             requiresAuth: true,
-            isAdmin: true
+            isSuperAdmin: true
+        }
+    },
+    {
+        path: '/sampah/edit/:id',
+        name: 'sampah.edit',
+        component: () => import('./views/sampah/Edit.vue'),
+        meta: {
+            requiresAuth: true,
+            isSuperAdmin: true
+        }
+    },
+    {
+        path: '/sampah/foto/:id',
+        name: 'sampah.foto',
+        component: () => import('./views/sampah/Foto.vue'),
+        meta: {
+            requiresAuth: true,
+            isSuperAdmin: true
         }
     },
     {
@@ -51,14 +69,6 @@ const routes = [
         meta: {
             requiresAuth: true,
             isSuperAdmin: true
-        }
-    },
-    {
-        path: '/data',
-        name: 'data.index',
-        component: () => import('./views/table/Index.vue'),
-        meta: {
-            requiresAuth: true,
         }
     },
 ];
